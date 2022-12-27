@@ -36,7 +36,7 @@ export const typeDefs = gql`
   }
 
   type Query {
-    getSomething: String
+    GetUserById(id: String): String!
   }
 
   type Mutation {
