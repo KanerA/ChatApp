@@ -1,18 +1,15 @@
-import fs from "fs";
-import path from "path";
 import { prisma } from "../../prismaClient";
-import { pubsub } from "../../pubsub";
-import { v4 as uuidv4 } from "uuid";
-import { UserInputType } from "../../types";
 import { formatDate, isValidDate } from "../utilities";
+import { UserCreateType, UserUpdateType } from "../../types";
 
-export const createUser = async (userData: UserInputType) => {
+export const createUser = async (userData: UserCreateType) => {
   try {
-    if (!isValidDate(userData.joinDate))
+    if (!isValidDate(userData.joinDate) || !isValidDate(userData.lastLogin))
       throw new Error("Error in date format");
     const formattedUser = {
       ...userData,
       joinDate: formatDate(userData.joinDate),
+      lastLogin: formatDate(userData.lastLogin),
     };
     await prisma.user.create({
       data: formattedUser,
@@ -21,5 +18,28 @@ export const createUser = async (userData: UserInputType) => {
   } catch (err) {
     console.log(err);
     return "Error in creating user";
+  }
+};
+
+export const updateUser = async (userData: UserUpdateType) => {
+  try {
+    if (!isValidDate(userData?.lastLogin))
+      throw new Error("Error in date format");
+    const formattedUser = {
+      ...userData,
+      lastLogin: formatDate(userData?.lastLogin),
+    };
+    await prisma.user.update({
+      where: { id: userData.id },
+      data: formattedUser,
+    });
+    return "success";
+  } catch (err) {
+    console.log("Error in updating user", {
+      error: err,
+      data: userData,
+      timestamp: new Date(),
+    });
+    return "Error in updating user";
   }
 };

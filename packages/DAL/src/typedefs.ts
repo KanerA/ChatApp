@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-core";
 export const typeDefs = gql`
-  input UserDataInput {
+  input UserDataCreate {
     id: String!
     email: String!
     joinDate: String!
@@ -10,12 +10,22 @@ export const typeDefs = gql`
     userIcon: String
   }
 
+  input UserDataUpdate {
+    id: String!
+    email: String
+    lastLogin: String
+    password: String
+    username: String
+    userIcon: String
+  }
+
   type Query {
     getSomething: String
   }
 
   type Mutation {
-    CreateUser(user: UserDataInput): String
+    CreateUser(userData: UserDataCreate): String!
+    UpdateUser(userData: UserDataUpdate): String!
   }
 
   type Subscription {
