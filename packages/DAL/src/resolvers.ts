@@ -9,5 +9,13 @@ export const resolvers = {
     CreateUser: (_, { userData }) => createUser(userData),
     UpdateUser: (_, { userData }) => updateUser(userData),
   },
-  Subscription: {},
+  Subscription: {
+    subscribeToUsers: {
+      resolve: (message) => {
+        console.log(message);
+        return message;
+      },
+      subscribe: () => pubsub.asyncIterator(["SUBSCRIBE_TO_USERS"]),
+    },
+  },
 };

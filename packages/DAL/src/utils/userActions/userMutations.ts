@@ -1,6 +1,9 @@
+import { pubsub } from "../../pubsub";
 import { prisma } from "../../prismaClient";
 import { formatDate, isValidDate } from "../utilities";
 import { UserCreateType, UserUpdateType } from "../../types";
+
+const SubscriptionTopic = "SUBSCRIBE_TO_USERS";
 
 export const createUser = async (userData: UserCreateType) => {
   try {
@@ -11,13 +14,20 @@ export const createUser = async (userData: UserCreateType) => {
       joinDate: formatDate(userData.joinDate),
       lastLogin: formatDate(userData.lastLogin),
     };
-    await prisma.user.create({
+    const res = await prisma.user.create({
       data: formattedUser,
     });
-    return "user created successfully";
+    await pubsub.publish(SubscriptionTopic, res);
+    return {
+      id: res.id,
+      isError: false,
+    };
   } catch (err) {
     console.log(err);
-    return "Error in creating user";
+    return {
+      isError: true,
+      errorMessage: err.message,
+    };
   }
 };
 
@@ -29,10 +39,11 @@ export const updateUser = async (userData: UserUpdateType) => {
       ...userData,
       lastLogin: formatDate(userData?.lastLogin),
     };
-    await prisma.user.update({
+    const res = await prisma.user.update({
       where: { id: userData.id },
       data: formattedUser,
     });
+    await pubsub.publish(SubscriptionTopic, res);
     return "success";
   } catch (err) {
     console.log("Error in updating user", {
