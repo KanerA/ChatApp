@@ -1,10 +1,11 @@
 import { pubsub } from "./pubsub";
 import { createUser, updateUser } from "./utils/userActions/userMutations";
-import { getUserById } from "./utils/userActions/userQueries";
+import { getUserById, getUsersByChat } from "./utils/userActions/userQueries";
 
 export const resolvers = {
   Query: {
     GetUserById: (_, { id }) => getUserById(id),
+    GetUsersByChat: (_, { chatId }) => getUsersByChat(chatId),
   },
   Mutation: {
     CreateUser: (_, { userData }) => createUser(userData),

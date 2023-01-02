@@ -1,11 +1,11 @@
 import { pubsub } from "../../pubsub";
 import { prisma } from "../../prismaClient";
 import { formatDate, isValidDate } from "../utilities";
-import { UserCreateType, UserUpdateType } from "../../types";
+import { TUserCreate, TUserUpdate } from "../../types";
 
 const SubscriptionTopic = "SUBSCRIBE_TO_USERS";
 
-export const createUser = async (userData: UserCreateType) => {
+export const createUser = async (userData: TUserCreate) => {
   try {
     if (!isValidDate(userData.joinDate) || !isValidDate(userData.lastLogin))
       throw new Error("Error in date format");
@@ -14,6 +14,11 @@ export const createUser = async (userData: UserCreateType) => {
       joinDate: formatDate(userData.joinDate),
       lastLogin: formatDate(userData.lastLogin),
     };
+
+    // send message to kafka
+    // *********************
+    // send subscription
+
     const res = await prisma.user.create({
       data: formattedUser,
     });
@@ -31,7 +36,7 @@ export const createUser = async (userData: UserCreateType) => {
   }
 };
 
-export const updateUser = async (userData: UserUpdateType) => {
+export const updateUser = async (userData: TUserUpdate) => {
   try {
     if (!isValidDate(userData?.lastLogin))
       throw new Error("Error in date format");

@@ -1,24 +1,44 @@
 import { prisma } from "../../prismaClient";
 
 export const getUserById = async (id: string) => {
-  const userFromDB = await prisma.user.findFirstOrThrow({
+  try {
+    const userFromDB = await prisma.user.findFirstOrThrow({
+      where: {
+        id,
+      },
+      select: {
+        email: true,
+        id: true,
+        joinDate: true,
+        lastLogin: true,
+        password: true,
+        userIcon: true,
+        username: true,
+        chats: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    return userFromDB;
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
+};
+
+export const getUsersByChat = async (chatId: string) => {
+  // test only after completing mutations for user and messages
+  const response = await prisma.user.findMany({
     where: {
-      id,
-    },
-    select: {
-      email: true,
-      id: true,
-      joinDate: true,
-      lastLogin: true,
-      password: true,
-      userIcon: true,
-      username: true,
       chats: {
-        select: {
-          id: true,
+        some: {
+          id: chatId,
         },
       },
     },
   });
-  return userFromDB;
+  console.log(response);
+  return response;
 };
