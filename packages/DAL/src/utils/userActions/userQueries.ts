@@ -20,5 +20,5 @@ export const getUserById = async (id: string) => {
       },
     },
   });
-  return JSON.stringify(userFromDB);
+  return userFromDB;
 };
