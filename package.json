@@ -11,6 +11,7 @@
     "apollo-server-core": "^3.11.1"
   },
   "scripts": {
-    "dev:dal": "lerna run dev --scope=@chat-app/dal --stream"
+    "start": "lerna run dev --scope=@chat-app/dal --stream",
+    "migrate": "lerna run migrate --scope=@chat-app/dal --stream"
   }
 }
