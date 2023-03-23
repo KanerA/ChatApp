@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start:client": "lerna run start --scope=@chat-app/client --stream",
-    "build:client": "lerna run build --scope=@chat-app/client --stream"
+    "build:client": "lerna run build --scope=@chat-app/client --stream",
     "start:dal": "lerna run dev --scope=@chat-app/dal --stream",
     "migrate": "lerna run migrate --scope=@chat-app/dal --stream"
   }
