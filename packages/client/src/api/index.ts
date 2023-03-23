@@ -1,7 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 import { User } from "../interfaces";
+import config from '../config.json'
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = config.api.url;
 
 interface ILogin {
   status?: boolean;
