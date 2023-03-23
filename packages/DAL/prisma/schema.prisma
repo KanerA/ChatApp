@@ -33,6 +33,7 @@ model Message {
 
 model Chat {
   id       String    @id @unique
+  icon     String
   messages Message[]
   users    User[]
 }
