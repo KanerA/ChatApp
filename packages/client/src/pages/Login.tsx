@@ -6,8 +6,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastOptions } from "react-toastify/dist/types";
 import { login } from "../api";
+import { useGetUserById } from "../hooks/useGetUserById";
 
 function Login() {
+  const getUser = useGetUserById("getUserById");
+
   const [values, setValues] = useState({
     username: "",
     password: "",
@@ -28,8 +31,13 @@ function Login() {
     }
   }, [navigate]);
 
+  // useEffect(() => {
+  //   getUser();
+  // }, [])
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    getUser();
     if (handleValidation()) {
       const { password, username } = values;
 
@@ -43,6 +51,8 @@ function Login() {
       }
     }
   };
+
+  // const handleSubmit = ;
 
   const handleValidation = () => {
     const { password, username } = values;
