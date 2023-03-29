@@ -7,6 +7,7 @@ const SubscriptionTopic = "SUBSCRIBE_TO_USERS";
 
 export const createUser = async (userData: TUserCreate) => {
   try {
+    if (!userData) throw new Error("there was a problem!!!")
     if (!isValidDate(userData.joinDate) || !isValidDate(userData.lastLogin))
       throw new Error("Error in date format");
     const formattedUser = {
