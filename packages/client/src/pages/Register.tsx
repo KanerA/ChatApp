@@ -5,7 +5,8 @@ import ChatLogo from "../assets/chat.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastOptions } from "react-toastify/dist/types";
-import { signUp } from "../api";
+import { signUp } from "../api/indexWithGQL";
+import { useSignUpUser } from "../hooks/useSignUpUser";
 
 function Register() {
   const [values, setValues] = useState({
@@ -14,6 +15,7 @@ function Register() {
     password: "",
     confirmPassword: "",
   });
+  const signUpFunc = useSignUpUser();
   const navigate = useNavigate();
 
   const toastOptions: ToastOptions = {
@@ -34,13 +36,11 @@ function Register() {
     event.preventDefault();
     if (handleValidation()) {
       const { password, username, email } = values;
-
-      const { data } = await signUp({ password, username, email });
-      if (data.status === false) {
-        toast.error(data.msg, toastOptions);
-      }
-      if (data.status === true) {
-        localStorage.setItem("chat-app-user", JSON.stringify(data.user));
+      const { data } = await signUp({ password, username, email }, signUpFunc);      
+      if (data.CreateUser.isError) {
+        toast.error(data.CreateUser.errorMessage, toastOptions);
+      } else {
+        localStorage.setItem("chat-app-user", JSON.stringify(data.CreateUser.id));
         navigate("/setAvatar");
       }
     }
