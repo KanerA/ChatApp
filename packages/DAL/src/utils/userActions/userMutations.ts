@@ -1,7 +1,7 @@
 import { pubsub } from "../../pubsub";
 import { prisma } from "../../prismaClient";
-import { formatDate, isValidDate } from "../utilities";
-import { TUserCreate, TUserUpdate } from "../../types";
+import { formatDate, isValidDate, validatePassword } from "../utilities";
+import { TUserCreate, TUserLogin, TUserUpdate } from "../../types";
 
 const SubscriptionTopic = "SUBSCRIBE_TO_USERS";
 
@@ -59,4 +59,28 @@ export const updateUser = async (userData: TUserUpdate) => {
     });
     return "Error in updating user";
   }
+};
+
+export const loginUser = async (userData: TUserLogin) => {
+  try {
+    const newDate = new Date();
+    const user = await prisma.user.findUniqueOrThrow({ select: { id: true, password: true }, where: { username: userData.username } })
+    if (!validatePassword(userData.password, user.password)) throw new Error("Wrong Password");
+    const updateUser = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        lastLogin: newDate
+      },
+    })
+    // TODO: return meaningful messages
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
+export const setUserIcon = async (icon: any) => {
+
 };

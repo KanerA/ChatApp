@@ -1,5 +1,5 @@
 import { pubsub } from "./pubsub";
-import { createUser, updateUser } from "./utils/userActions/userMutations";
+import { createUser, loginUser, setUserIcon, updateUser } from "./utils/userActions/userMutations";
 import { getUserById, getUsersByChat } from "./utils/userActions/userQueries";
 
 export const resolvers = {
@@ -10,6 +10,8 @@ export const resolvers = {
   Mutation: {
     CreateUser: (_, { userData }) => createUser(userData),
     UpdateUser: (_, { userData }) => updateUser(userData),
+    LoginUser: (_, { userData }) => loginUser(userData),
+    SetUserIcon: (_, { icon }) => setUserIcon(icon)
   },
   Subscription: {
     subscribeToUsers: {

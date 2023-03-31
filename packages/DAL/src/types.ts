@@ -19,6 +19,11 @@ export type TUserUpdate = {
   userIcon?: string;
 };
 
+export type TUserLogin = {
+  username: string;
+  password: string;
+}
+
 export type TChat = {
   id: string;
   icon: string;

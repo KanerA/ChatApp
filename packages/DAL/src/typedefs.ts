@@ -35,6 +35,11 @@ export const typeDefs = gql`
     errorMessage: String
   }
 
+  input UserLogin {
+    username: String
+    password: String
+  }
+
   type Query {
     GetUserById(id: String): User!
     GetUsersByChat(chatId: String): [User]
@@ -43,6 +48,8 @@ export const typeDefs = gql`
   type Mutation {
     CreateUser(userData: UserDataCreate): crudMessage!
     UpdateUser(userData: UserDataUpdate): crudMessage!
+    LoginUser(userData: UserLogin!): Boolean!
+    SetUserIcon(icon: String): crudMessage!
   }
 
   type Subscription {
