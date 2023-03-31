@@ -5,11 +5,11 @@ import ChatLogo from "../assets/chat.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastOptions } from "react-toastify/dist/types";
-import { login } from "../api";
-import { useGetUserById } from "../hooks/useGetUserById";
+import { useLoginUser } from "../hooks/useLoginUser";
+import { setLocalStorage } from "../utils/helpFunctions";
 
 function Login() {
-  const getUser = useGetUserById("getUserById");
+  const loginFunction = useLoginUser();
 
   const [values, setValues] = useState({
     username: "",
@@ -31,28 +31,18 @@ function Login() {
     }
   }, [navigate]);
 
-  // useEffect(() => {
-  //   getUser();
-  // }, [])
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    getUser();
     if (handleValidation()) {
-      const { password, username } = values;
-
-      const { data } = await login({ password, username });
-      if (data.status === false) {
-        toast.error(data.msg, toastOptions);
-      }
-      if (data.status === true) {
-        localStorage.setItem("chat-app-user", JSON.stringify(data.user));
+      const { data } = await loginFunction({ variables: { userData: values }});
+      if (!data) {
+        toast.error("Error in login", toastOptions);
+      } else {
+        setLocalStorage(data.LoginUser);
         navigate("/");
       }
     }
   };
-
-  // const handleSubmit = ;
 
   const handleValidation = () => {
     const { password, username } = values;
@@ -78,7 +68,7 @@ function Login() {
             type="text"
             placeholder="Username"
             name="username"
-            onChange={(e) => setValues({ ...values, username: e.target.value })}
+            onChange={(e) => setValues(values => ({ ...values, username: e.target.value }))}
             min="3"
           />
 
@@ -86,7 +76,7 @@ function Login() {
             type="password"
             placeholder="Password"
             name="password"
-            onChange={(e) => setValues({ ...values, password: e.target.value })}
+            onChange={(e) => setValues(values => ({ ...values, password: e.target.value }))}
           />
 
           <button type="submit">Login</button>

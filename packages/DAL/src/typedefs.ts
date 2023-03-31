@@ -48,7 +48,7 @@ export const typeDefs = gql`
   type Mutation {
     CreateUser(userData: UserDataCreate): crudMessage!
     UpdateUser(userData: UserDataUpdate): crudMessage!
-    LoginUser(userData: UserLogin!): Boolean!
+    LoginUser(userData: UserLogin!): String!
     SetUserIcon(icon: String): crudMessage!
   }
 

@@ -75,9 +75,9 @@ export const loginUser = async (userData: TUserLogin) => {
       },
     })
     // TODO: return meaningful messages
-    return true;
+    return user.id;
   } catch (err) {
-    return false;
+    return null;
   }
 }
 

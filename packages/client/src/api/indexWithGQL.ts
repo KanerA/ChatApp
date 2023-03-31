@@ -34,23 +34,11 @@ interface ISetAvatar {
   isSet: boolean;
 }
 
-// export const login = (FormData: {
-//   password: string;
-//   username: string;
-// }): any => {
-//   const date = new Date().toISOString();
-//   const loginData = {
-//     password: FormData.password,
-//     username: FormData.username,
-//     lastLogin: date
-//   }
-// }
-
 export const signUp = (FormData: {
   password: string,
   username: string,
   email: string
-}, signupFunction: MutationFunction<any, any>) => {
+}, signupFunction: MutationFunction<any, { userData: { password: string, username: string, email: string } }>) => {
   const date = new Date();
   const id = uuidv4();
   const signUpData: TUserCreate = {
