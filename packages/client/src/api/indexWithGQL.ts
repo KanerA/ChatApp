@@ -38,7 +38,7 @@ export const signUp = (FormData: {
   password: string,
   username: string,
   email: string
-}, signupFunction: MutationFunction<any, { userData: { password: string, username: string, email: string } }>) => {
+}, signupFunction: MutationFunction<any, any>) => {
   const date = new Date();
   const id = uuidv4();
   const signUpData: TUserCreate = {
